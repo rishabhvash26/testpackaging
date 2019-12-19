@@ -1,0 +1,6 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.onIt}"/>
+    <aura:registerEvent name="cevent" type="c.grandchildevent"/>
+     <aura:handler name="cevent" event="c:grandchildevent" action="{!c.handle}" phase="capture"/>
+	
+</aura:component>

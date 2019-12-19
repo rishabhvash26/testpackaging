@@ -1,0 +1,21 @@
+<apex:page Controller="sampleCon"  id="thePage"> 
+     
+        <apex:pageBlock id="thePageBlock" > 
+            <apex:pageBlockTable value="{!records}" var="record" id="thePageBlockTable" > 
+                <apex:column >
+                    <apex:outputField value="{!record.Name}" id="AccountNameDOM" /> 
+                    <apex:facet name="header">Name</apex:facet>
+                </apex:column>
+             
+                <apex:column >
+                    <apex:outputField value="{!record.Industry}" 
+                        id="AccountIndustryDOM" />  
+                        <apex:facet name="header">Industry</apex:facet>
+                </apex:column>
+                
+            </apex:pageBlockTable> 
+            <apex:pageBlockButtons > 
+                          </apex:pageBlockButtons> 
+        </apex:pageBlock> 
+    
+</apex:page>

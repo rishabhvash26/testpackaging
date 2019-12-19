@@ -1,0 +1,13 @@
+<aura:component controller="recordByRecordType">
+    <aura:handler name="init" value="{!this}" action="{!c.oninIt}"/>
+    <aura:attribute name="conlist" type="list"/>
+    <aura:attribute name="key" type="list"/>
+    <aura:iteration items="{!v.conlist}" var="id" indexVar="">
+    {!id.key}
+        <aura:iteration items="{!id.value}" var="vr">
+            name={!vr.Name}<br></br>
+        </aura:iteration>
+    
+    </aura:iteration>
+	
+</aura:component>

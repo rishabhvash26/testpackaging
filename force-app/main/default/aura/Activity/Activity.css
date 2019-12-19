@@ -1,0 +1,52 @@
+.THIS .metro{
+    background-color:#D6D6D5;
+    color:black;
+    height:44px;  
+    font-size:inherit;
+    border-color:white;
+    border-width:medium;
+}
+.THIS .selected{
+    background-color:#F3F1F0;
+    color:black;
+    height:44px; 
+    font-size:inherit;
+    border-color:white;
+    border-width:medium;
+}
+.THIS .slds-card__header{
+    margin:0;   
+}
+.THIS .pointer{
+    cursor: pointer;   
+}
+.THIS .metro:hover{
+    background-color: #F3F1F0	;
+}
+.THIS .header_label{
+    font-weight:;
+    font-size:1rem;
+}
+.THIS .display{
+    display:contents !important;
+}
+.THIS .color svg {
+    width:1.5rem;
+    height:1.3rem;
+    fill : #1b5297;
+}
+.THIS .menubutton .slds-button{
+    height:auto!important;
+    width:auto!important;
+    padding:4px !important;
+    z-index: 1;
+}
+.THIS .grey{
+    background-color:#D6D6D5;
+}
+.THIS .slds-current-color svg{
+    fill:#484a4c;
+}
+.THIS .color svg{
+    fill:#484a4c;
+}

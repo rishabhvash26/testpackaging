@@ -1,0 +1,17 @@
+<aura:component controller="sampleCon" >
+     <aura:attribute name="flag" type="Boolean" default="false"/>
+    <aura:attribute name="recid" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="names" type="list"/>
+    <aura:iteration items="{!v.names}" var="name">
+        <div data-value="{!name.Id}" onclick="{!c.linkClick}">
+        <a>{!name.Name}</a>
+        </div>
+        <div>
+            hello
+        <aura:if isTrue="{!v.flag}">
+            <c:showcon2 record="{!v.recid}"/>
+        </aura:if>
+            </div>
+    </aura:iteration>
+</aura:component>

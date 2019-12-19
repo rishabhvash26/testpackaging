@@ -1,0 +1,93 @@
+<apex:page controller="CameraAccess" standardStylesheets="false">
+    <apex:slds />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
+    </script>
+    
+    
+    <div class="container slds-scope">
+        
+        
+        <apex:form >
+            <button class="slds-button slds-button_brand" type="button"   name="Cleck me" onclick="handlewebcam(event);">show camera</button>
+            <button class="slds-button slds-button_brand" type="button" id="snap" onclick="captureimage(event);">log your incoming</button>
+            <button class="slds-button slds-button_brand" type="button" id="snap" onclick="captureimage(event);">register</button>
+            <apex:actionFunction action="{!methodOne}" name="methodOneInJavascript" rerender="showstate">
+                <apex:param name="image" value="" />              
+                <apex:param name="currentDay" value="" />               
+            </apex:actionFunction>
+            
+            <canvas id="canvas" style="display:none;" width="640" height="480"></canvas>
+            
+            <center><video id="video" width="640" height="480" autoplay="autoplay"></video></center>
+            
+        </apex:form>
+    </div>
+    <script>
+     var videoElement;
+    function handlewebcam(event) { 
+        if( $('#video').hide())
+            $('#video').show();
+        videoElement = document.querySelector('video');
+        navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia);
+        console.log("navigator.getMedia", navigator.getMedia);
+        //  var video = document.getElementById('video');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({
+                video: true
+            }).then(function(stream) {
+                // video.src = window.URL.createObjectURL(stream);
+                
+                videoElement.srcObject = stream;
+                //localStream = stream;
+                videoElement.play();
+                document.getElementById("video").setAttribute("src", "null");
+                // console.log('video.src',videoElement.src);
+                // video.play();
+            });    
+        }
+    }
+    
+    // Capture Snap Photo
+    function captureimage(event) {
+        
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var video = document.getElementById("video");
+        var videoObj = {
+            "video": true
+        };
+        console.log(video);
+        if (video.src != "") {
+            console.log('Image Captured');
+            console.log('video -- ' + $('#video')[0]);
+            console.log('Image Src -- ' + $('#video')[0].src);
+            context.drawImage(video, 0, 0, 100, 50);
+            // Littel effects
+            $('#video').hide();
+            $('#canvas').show();
+            // $('#snap').hide();
+            var today = new Date();
+            var day = today.getDay();
+            var daylist = ["Sunday", "Monday", "Tuesday", "Wednesday ", "Thursday", "Friday", "Saturday"];
+            var currentDay = daylist[day];
+            console.log("Today is : " + daylist[day] + ".");           
+            var dataUrl = canvas.toDataURL();
+            console.log(dataUrl);
+            methodOneInJavascript(dataUrl , currentDay); 
+             $("#canvas").hide();
+            let stream = videoElement.srcObject;
+            let tracks = stream.getTracks();            
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+            
+            alert('Your Time Is Logged');
+        } else {
+            console.log('error');
+        }
+    }
+    
+    </script>
+    
+</apex:page>

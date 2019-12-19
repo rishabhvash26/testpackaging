@@ -1,0 +1,10 @@
+<apex:page >
+<a href="/0012v00002QvOBWAA3"
+id="lookup0012v00002QvOBWAA3opp4"
+onblur="LookupHoverDetail.getHover('lookup0012v00002QvOBWAA3opp4').hide();"
+onfocus="LookupHoverDetail.getHover('lookup0012v00002QvOBWAA3opp4', '/0012v00002QvOBWAA3/m?retURL=/0012v00002QvOBWAA3&isAjaxRequest=1').show();"
+onmouseout="LookupHoverDetail.getHover('lookup0012v00002QvOBWAA3opp4').hide();"
+onmouseover="LookupHoverDetail.getHover('lookup0012v00002QvOBWAA3opp4', '/0012v00002QvOBWAA3/m?retURL=/0012v00002QvOBWAA3&isAjaxRequest=1').show();">
+    account
+</a>
+    </apex:page>

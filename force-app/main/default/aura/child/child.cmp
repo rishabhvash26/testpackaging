@@ -1,0 +1,4 @@
+<aura:component >
+	 <aura:handler name="cevent" event="c:grandchildevent" action="{!c.handle}" />
+    <c:grandchild/>
+</aura:component>

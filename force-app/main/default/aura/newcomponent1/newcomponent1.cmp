@@ -1,0 +1,5 @@
+<aura:component >
+    <aura:attribute name="attr1" type="string"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <c.newcomponent attr="{!v.attr1}"/>
+</aura:component>

@@ -1,0 +1,160 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="ActivityController" access="global" >
+    <aura:Attribute name="todaytasklist" type="list"/>
+    <aura:attribute name="box1" type="Boolean" default="false" />
+    <aura:attribute name="noRecords" type="Boolean" default="false" />
+    <aura:Attribute name="todaytasklistlength" type="Integer"/>
+    <aura:Attribute name="overduetasklistlength" type="Integer"/>
+    <aura:Attribute name="thismonthtasklistlength" type="Integer"/>
+    <aura:Attribute name="allopentasklistlength" type="Integer"/>
+    <!-- @description contains all records data.-->
+    <aura:attribute name="allRecords" type="List" default="[]"/>
+    <!--@description contains pageSize i.e no of records to show on a page in pagination.-->
+    <aura:attribute name="pageSize" type="Integer" default="5"/>
+    <!--@description contains pageNumber of current page.-->
+    <aura:attribute name="pageNumber" type="Integer" default="0"/>
+    <!--@description contains list of records after applying pagination.-->
+    <aura:attribute name="paginationList" type="List" default="[]"/>
+    <!--@description contains integer value of total number of pages shown in a datatable.-->
+    <aura:attribute name="totalPages" type="Integer" default="0"/>
+    <!-- @description contains total number of customer records.-->
+    <aura:attribute name="dataSize" type="Integer" default="0"/> 
+    <!--@description Boolean attribute to check for last page in pagination.-->
+    <aura:attribute name="isLastPage" type="Boolean" default="false"/>
+    <aura:Attribute name="completedtasklist" type="list"/>
+    <aura:handler name="init" value="{! this}" action="{!c.doInit}"/>
+    <div class="slds-card">
+        <header class="slds-card__header slds-grid slds-p-left_x-small slds-p-right_x-small slds-p-bottom_x-small">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning:icon style="background-color: grey" iconName="standard:task" alternativeText="Approved"/>
+                </div>
+                <div class="slds-media__body slds-truncate">
+                    <h2>
+                        <span class="header_label">
+                            My Tasks
+                        </span>
+                    </h2>
+                    
+                </div>
+            </div>
+            <div  class="slds-m-left_large">
+            <lightning:button  class=" grey slds-p-right_x-small slds-text-color_weak slds-p-left_x-small" onclick="{!c.newTask}">
+                <lightning:icon  class="color slds-current-color slds-text-color_weak slds-button__icon_left" iconName="utility:add" alternativeText="Approved"/>
+                New
+            </lightning:button>
+                </div>
+        </header>
+        <div class="slds-grid slds-p-top_small slds-align_absolute-center  slds-p-bottom_xx-small slds-m-left_x-small slds-m-right_x-small slds-border_top slds-border_bottom" > 
+            <div class="slds-col slds-size_1-of-12 pointer" onclick="{!c.onEyeClick}">
+                
+                
+                <lightning:icon class="color slds-icon_container slds-button__icon slds-button__icon_large" title="View All" iconName="utility:preview">
+                <span class="slds-assistive-text">View All</span>
+                </lightning:icon></div>
+            <div class="slds-col  slds-size_1-of-12  pointer " onclick="{!c.onRefreshClick}">
+                <lightning:icon class="color slds-icon_container " title="Refresh" iconName="utility:refresh">
+                 <span class="slds-assistive-text">Refresh</span>
+                </lightning:icon>
+           
+            </div>
+            
+            
+            
+        </div>
+        
+        <div  class=" slds-m-bottom_xxx-small">
+            
+            <div class="slds-grid slds-m-top_x-small slds-col pointer slds-size_12-of-12">
+                <div onclick="{!c.todayTaskTab}" aura:id="todayTaskTab"  class="slds-col metro slds-p-top_x-small slds-border_left  slds-small-size_3-of-12 slds-size_3-of-12 "><span class="slds-align_absolute-center">Today's Task</span><span class="slds-align_absolute-center">{!v.todaytasklistlength}</span></div>
+                <div onclick="{!c.overdueTaskTab}"  aura:id="overdueTaskTab" class="slds-col metro slds-p-top_x-small slds-border_left slds-small-size_3-of-12 slds-size_3-of-12 "><span class="slds-align_absolute-center">All Overdue</span><span class="slds-align_absolute-center">{!v.overduetasklistlength}</span></div>
+                
+                <div onclick="{!c.thisMonthTaskTab}"  aura:id="thisMonthTaskTab" class="slds-col metro  slds-p-top_x-small  slds-small-size_3-of-12 slds-border_left slds-size_3-of-12  "><span class="slds-align_absolute-center">This Month</span><span class="slds-align_absolute-center">{!v.thismonthtasklistlength}</span></div>
+                
+                <div onclick="{!c.allOpenTaskTab}"  aura:id="allOpenTaskTab" class="slds-col selected slds-small-size_3-of-12  slds-p-top_x-small slds-border_right slds-border_left slds-size_3-of-12 "><span class="slds-align_absolute-center">All Open</span><span class="slds-align_absolute-center">{!v.allopentasklistlength}</span></div>                
+            </div>
+            <div aura:id="TodayTabDataId" id="tab-default-1" style="height: 368px;"  class=" slds-show slds-p-left_x-small" role="tabpanel" aria-labelledby="Fruits_linking">
+                <aura:iteration items="{!v.todaytasklist}" var="item" indexVar="num">
+                    <div class="demo-only slds-m-top_small">
+                        <div class="slds-tile slds-border_bottom">
+                           
+                            <div class="slds-tile__detail ">
+                                
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_8-of-12 slds-grid "> 
+                                        
+                                        <lightning:input  name="{!item.Id}" checked="{!item.checkboxVal}" type="checkbox" class=" slds-m-left_xxx-small" aura:id="{!item.Id}" label="" onchange="{!c.onValChange}"/>
+                                        
+                                        <a href="{!'/lightning/r/Task/'+item.Id+'/view'}" target="_blank">{!item.Subject}</a>
+                                        
+                                    </div>
+                                    <div  class="slds-col slds-size_4-of-12  ">
+                                        <div class="slds-col slds-grid slds-grid_align-end">
+                                            <aura:if isTrue="{!(item.ActivityDate!=null)}">
+                                         <lightning:formattedDateTime value="{!item.ActivityDate}" year="2-digit" month="short" day="2-digit" timeZone="UTC"/>
+                                                 <aura:set attribute="else">
+      No Due Date
+    </aura:set>
+                                            </aura:if>
+                                            <lightning:buttonMenu  menuAlignment="right" class="  menubutton slds-p-left_x-small slds-p-right_x-small" name="{!item.Id}" aura:id="menu"  onselect="{! c.onRecordEditOrDelete }" alternativeText="Show menu">
+        <lightning:menuItem value="edit" label="Edit" />
+        <lightning:menuItem value="delete" label="Delete" />                       
+    </lightning:buttonMenu>
+                                            
+                                        </div>
+                                        </div>
+                                </div>
+                                 
+                                <div class="">
+                                    <div class="slds-col slds-size_8-of-12">
+                                        {!item.Priority} - {!item.Status}
+                                    </div>
+                                    <div class="slds-col slds-size_4-of-12">
+                                        
+                                    </div>
+                                </div>
+                                
+                                <div class="">
+                                    <div class="slds-col slds-size_8-of-12 slds-truncate">
+                                        <a href="{!'/lightning/r/Task/'+item.OwnerId+'/view'}" target="_blank">{!item.Owner.Name}</a> -
+                                        <a href="{!'lightning/r/User/'+item.AccountId+'/view'}" target="_blank">{!item.Account.Name}</a>
+                                    </div>
+                                    <div class="slds-col slds-size_4-of-12">
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </aura:iteration>
+                <aura:if isTrue="{!v.noRecords}">
+                    <div class="slds-m-around_medium">
+                        You don’t have any tasks in this list. Look in a different list, or create a task
+                    </div>
+                
+                </aura:if>
+            </div>
+            <div class="slds-align--absolute-center slds-m-top_small slds-m-bottom_small">  
+                <lightning:button  class="display" onclick="{!c.onPrev}" disabled="{! v.pageNumber == 1|| v.pageNumber == 0}" >
+                    <lightning:icon iconName="utility:chevronleft"/>
+                </lightning:button>
+                <div class="slds-badge slds-badge_lightest slds-m-horizontal_small ">
+                    Page {!v.pageNumber} of {!v.totalPages}
+                </div>          
+                <lightning:button  class="display" onclick="{!c.onNext}" disabled="{!v.totalPages==v.pageNumber}">
+                    <lightning:icon iconName="utility:chevronright"/> 
+                </lightning:button>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    
+    
+    
+    
+    
+    <!--/div -->
+</aura:component>
